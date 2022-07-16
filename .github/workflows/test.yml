@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  DVLA_MOT_API_KEY: ${{ secrets.DVLA_MOT_API_KEY }}
+  DVLA_VES_API_KEY: ${{ secrets.DVLA_VES_API_KEY }}
+
 jobs:
   test:
     name: Test
