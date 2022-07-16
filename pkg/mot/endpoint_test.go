@@ -1,10 +1,13 @@
 package mot
 
-import "testing"
+import (
+	"os"
+	"testing"
+)
 
 func TestsEndpointReturnsData(t *testing.T) {
-	client := NewClient(readMOTApiKeyFromEnvVar())
-	car, err := client.GetCar(registration)
+	client := NewClient(os.Getenv("DVLA_MOT_API_KEY"))
+	car, err := client.GetCar("RJ06JOU")
 	if err != nil {
 		t.Fatal()
 	}
