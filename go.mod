@@ -1,4 +1,4 @@
-module dvla_tools
+module github.com/issy/dvla-tools
 
 go 1.18
 
