@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dvla/cmd"
+	"github.com/issy/dvla-tools/cmd"
 )
 
 func main() {

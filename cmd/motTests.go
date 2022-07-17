@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"dvla/pkg/mot"
 	"fmt"
+	"github.com/issy/dvla-tools/pkg/mot"
 	"github.com/spf13/cobra"
 )
 

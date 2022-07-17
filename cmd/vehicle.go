@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"context"
-	"dvla/pkg/ves"
 	"fmt"
+	"github.com/issy/dvla-tools/pkg/ves"
 	"github.com/spf13/cobra"
 	"os"
 )
