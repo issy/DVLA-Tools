@@ -11,9 +11,19 @@ type ApiClient struct {
 	vesClient *ves.APIClient
 }
 
-type Vehicle struct {
-	Ves *ves.Vehicle `json:"ves"`
-	Mot *mot.Car     `json:"mot"`
+type VehicleResponse struct {
+	Registration      string        `json:"registration"`
+	YearOfManufacture int32         `json:"yearOfManufacture"`
+	Make              string        `json:"make"`
+	Model             string        `json:"model"`
+	Colour            string        `json:"colour"`
+	FuelType          string        `json:"fuelType"`
+	EngineCapacity    int32         `json:"engineCapacity"`
+	MotStatus         string        `json:"motStatus"`
+	MotExpiryDate     string        `json:"motExpiryDate"`
+	MotTests          []mot.MotTest `json:"motTests"`
+	TaxStatus         string        `json:"taxStatus"`
+	TaxDueDate        string        `json:"taxDueDate"`
 }
 
 func NewClient(motApiToken string, vesApiToken string) *ApiClient {
@@ -27,7 +37,24 @@ func NewClient(motApiToken string, vesApiToken string) *ApiClient {
 	}
 }
 
-func (client *ApiClient) GetVehicle(registration string) *Vehicle {
+func makeVehicleResponse(motResponse *mot.Car, vesResponse *ves.Vehicle) *VehicleResponse {
+	return &VehicleResponse{
+		Registration:      motResponse.Registration,
+		YearOfManufacture: vesResponse.GetYearOfManufacture(),
+		Make:              vesResponse.GetMake(),
+		Model:             motResponse.Model,
+		Colour:            vesResponse.GetColour(),
+		FuelType:          vesResponse.GetFuelType(),
+		EngineCapacity:    vesResponse.GetEngineCapacity(),
+		MotStatus:         vesResponse.GetMotStatus(),
+		MotExpiryDate:     vesResponse.GetMotExpiryDate(),
+		MotTests:          motResponse.MotTests,
+		TaxStatus:         vesResponse.GetTaxStatus(),
+		TaxDueDate:        vesResponse.GetTaxDueDate(),
+	}
+}
+
+func (client *ApiClient) GetVehicle(registration string) any {
 	vesResponse, err := client.vesRequest(registration)
 	if err != nil {
 		panic(err)
@@ -36,7 +63,7 @@ func (client *ApiClient) GetVehicle(registration string) *Vehicle {
 	if err != nil {
 		panic(err)
 	}
-	return &Vehicle{Ves: vesResponse, Mot: motResponse}
+	return makeVehicleResponse(motResponse, vesResponse)
 }
 
 func (client *ApiClient) vesRequest(registration string) (*ves.Vehicle, error) {
